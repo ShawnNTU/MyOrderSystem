@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>Document</title>
+</head>
+<body>
+    <button id="test"> TEST</button>
+</body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+<script>
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+
+    $("#test").on("click", function(e){
+        // e.target.textContent = "Click";
+        $(this).text("Clicked!");
+        var test_url = "/database/test";
+        var POST_object = {"test1":"post!"};
+        fetch(test_url, {
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify(POST_object)
+        }).then(response => response.json())
+        .then(function (data) {
+            console.log(data);
+        })
+    });
+</script>
