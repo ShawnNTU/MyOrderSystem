@@ -13,3 +13,16 @@ The order format has been customized to suit our specific needs.
 - Database:MongoDB
 - Backend:Django
 - Frontend:React
+
+## How to use
+
+1. Download MongoDB and start an instance with a specific host and port. (one can put these settings in a customed mongod.cfg file)
+2. Run Django server with a specific host and port.
+
+one need to replace the path to connecting ones MongoDB in the 10 line of `SuMingXingSite/database/DBOperation.py`.
+
+## Required Python Modules
+
+- Django
+- django-cors-headers
+- pymongo >= 4.9.1
