@@ -2,6 +2,8 @@ import { useImmer } from "use-immer"
 
 import { TextInput, Checkbox } from "../Component/Input";
 import { getOrders } from "../DBOperation/operation";
+import Swal from "sweetalert2";
+import { useState } from "react";
 
 export function OrderFilter({setFilterRule, setOrders}){
     
@@ -21,6 +23,10 @@ export function OrderFilter({setFilterRule, setOrders}){
 
     const [rules, setRules] = useImmer(init_rules);
     const [checked_rule, setCheckedRule] = useImmer(init_checked_rule);
+
+    const [button_text, setButtonText] = useState("按下後開始篩選!");
+	const [button_disable, setButtonDisable] = useState(false);
+
 
     return (
         <div className="my-2 py-1 text-lg bg-neutral-100 rounded-md border grid grid-cols-2 gap-2 justify-items-center">
@@ -79,23 +85,36 @@ export function OrderFilter({setFilterRule, setOrders}){
                         
             <button
                 className="col-span-2 mx-auto h-10 w-3/4 font-bold rounded-md outline-none border border-cyan-100 bg-cyan-300 hover:bg-cyan-500 active:bg-cyan-700 hover:text-white"
+                disabled={button_disable}
                 onClick={async ()=>{
                     let used_rules = {
-                        "start_time":"",
-                        "end_time":"",
-                        "status":"",
-                        "types":""
+                        "start_time":checked_rule.start_time ? rules.start_time : "",
+                        "end_time":checked_rule.end_time ? rules.end_time : "",
+                        "status":checked_rule.status ? rules.status : "unfinished",
+                        "types":checked_rule.types ? rules.types : "pickup_time"
                     }
-                    used_rules.status = checked_rule.status ? rules.status : "unfinished"
-                    used_rules.types = checked_rule.types ? rules.types : "pickup_time"
-                    used_rules.start_time = checked_rule.start_time ? rules.start_time : ""
-                    used_rules.end_time = checked_rule.end_time ? rules.end_time : ""
                     // console.log(used_rules)
-                    let filtered_orders = await getOrders(used_rules);
-                    setOrders(filtered_orders)
-                    setFilterRule(used_rules);
+                    setButtonText("連線中...");
+                    setButtonDisable(true);
+                    setFilterRule(used_rules);                    
+                    let response = await getOrders(used_rules);
+                    if (response.JSStatus === "Success"){
+                        Swal.fire({
+                            title:"獲取成功",
+                            icon:"success",                            
+                        })
+                        setOrders(response.data);
+                    }else{
+                        Swal.fire({
+                            title:"獲取失敗",
+                            icon:"error",   
+                            text:response.data,                                                        
+                        })
+                    }
+                    setButtonDisable(false);
+                    setButtonText("按下後開始篩選!");
             }}
-            >按下後開始篩選!</button>
+            >{button_text}</button>
         </div>
     )
 }

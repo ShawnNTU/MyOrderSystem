@@ -7,7 +7,7 @@ from bson import ObjectId
 DEBUG = False
 CURRENT_COLLECTION = "testCollection" if DEBUG else "orderCollection"
 
-URI = "mongodb://192.168.0.13:27017/?directConnection=true"
+URI = "mongodb://192.168.0.14:27017/?directConnection=true"
 DB_NAME = 'orderDB'
 CLIENT = None
 
@@ -27,25 +27,28 @@ def disconnectDB():
 
 """
 response :{
-    "MongoStatus":"Sucess" or "Error"
+    "MongoStatus":"Success" or "Error"
     "message":detail about status and operation
     other_attributes: ...
     ...
 }
 """
 
+SUCCESS = "Success"
+ERROR = "Error"
+
 def insertDocument(collection:Collection, doc):
     # see https://pymongo.readthedocs.io/en/stable/api/pymongo/results.html#pymongo.results.InsertOneResult
     insert_result = collection.insert_one(doc)
     if insert_result.acknowledged:
         response = {
-            "MongoStatus":"Sucess",
+            "MongoStatus":SUCCESS,
             "message":"Insert Sucess",
             "_id": str(insert_result.inserted_id)
         }
     else:
         response = {
-            "MongoStatus":"Error",
+            "MongoStatus":ERROR,
             "message":"Insert Error",
         }
     return response
@@ -67,14 +70,14 @@ def findDocuments(collection:Collection, filter):
         for doc in find_result:
             doc["_id"] = str(doc["_id"]) # change id into string
         response = {
-            "MongoStatus":"Sucess",
+            "MongoStatus":SUCCESS,
             "message":"Find Sucess",
             "data":find_result,
         }
         return response
     except Exception as e:
         response = {
-            "MongoStatus":"Error",
+            "MongoStatus":ERROR,
             "message":f"MongoDB Error: {str(e)}",
         }
         return response
@@ -88,14 +91,14 @@ def updateDocumentByID(collection:Collection, id, updatevalues):
     update_result = collection.update_one(filter=id_filter, update=update_object)
     if update_result.acknowledged:
         response = {
-            "MongoStatus":"Sucess",
+            "MongoStatus":SUCCESS,
             "message":"Update Sucess",
             "matched_count":update_result.matched_count,
             "modified_count":update_result.modified_count
         }
     else:
         response = {
-            "MongoStatus":"Error",
+            "MongoStatus":ERROR,
             "message":"Update Error",
         }
     return response
@@ -104,13 +107,13 @@ def deleteDocumentByID(collection:Collection, id):
     delete_result =  collection.delete_one({'_id':ObjectId(id)})
     if delete_result.acknowledged:
         response = {
-            "MongoStatus":"Sucess",
+            "MongoStatus":SUCCESS,
             "message":"Delete Sucess",
             "deleted_count":delete_result.deleted_count,
         }
     else:
         response = {
-            "MongoStatus":"Error",
+            "MongoStatus":ERROR,
             "message":"Delete Error",
         }    
     return response

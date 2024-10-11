@@ -51,49 +51,53 @@ export function CustomerInfo(){
             "order_time":value
         })
     }
-    let order_time_className = "px-0.5 w-36 outline-0 border border-stone-500 bg-white focus:ring-2 rounded-md hover:bg-slate-300"
+    let order_time_className = "px-0.5 col-span-3 outline-0 border border-stone-500 bg-white focus:ring-2 rounded-md hover:bg-slate-300"
     let handleChangePickupTimeEvent = (value)=>{
         dispatch({
             "type":"changePickupTime",
             "pickup_time":value
         })
     }
-    let pickup_time_className = "px-0.5 w-36 outline-0 border border-stone-500 bg-white focus:ring-2 rounded-md hover:bg-slate-300"
+    let pickup_time_className = "px-0.5 col-span-3 outline-0 border border-stone-500 bg-white focus:ring-2 rounded-md hover:bg-slate-300"
 
     return ( 
-        <div className="py-1 border-y-2 grid grid-cols-2 gap-1 justify-items-center">
-            <span>訂購人姓名：</span>
-            <TextInput handleChangeEvent={handleChangeNameEvent} value={customer_info.name} className={name_className} style={name_style}/>
-            <div className="col-span-2 border-y-2 py-0.5 w-3/4 flex justify-center gap-1">
-                <span> 訂購人電話 </span>
-                <AddButton handleClickEvent={handleAddEmptyPhoneEvent} />
-            </div>
-            {customer_info.phone_list.map(phone =>{
-                let handleDeleteClickEvent = ()=>{
-                    dispatch({
-                        "type":"deletePhoneNumber",
-                        "id":phone.id
-                    });
-                }            
-                let handlePhoneNumberChange = (value)=>{dispatch({
-                    "type":"changePhoneNumber",
-                    "id":phone.id,
-                    "number":value,
-                })}
-                let phone_number_style = {
-                    width:(phone.number.length + 0.5) + "ch",
-                    minWidth:"10.5ch"
-                }
-                return(
-                <div key={phone.id} className="flex justify-center">
-                    <TextInput handleChangeEvent={handlePhoneNumberChange} value={phone.number} className={phone_number_className} style={phone_number_style}/>
-                    <DeleteButton handleClickEvent={handleDeleteClickEvent} />
+        <>
+            <div className="p-1 border-y-2 grid grid-cols-2 gap-1 justify-items-center">
+                <span>訂購人姓名：</span>
+                <TextInput handleChangeEvent={handleChangeNameEvent} value={customer_info.name} className={name_className} style={name_style}/>
+                <div className="col-span-2 border-y-2 py-0.5 w-3/4 flex justify-center gap-1">
+                    <span> 訂購人電話 </span>
+                    <AddButton handleClickEvent={handleAddEmptyPhoneEvent} />
                 </div>
-            )})}
-            <span className="col-start-1">訂購時間：</span>
-            <TextInput handleChangeEvent={handleChangeOrderTimeEvent} value={customer_info.order_time} className={order_time_className} type="date"/>
-            <span>取貨時間：</span>
-            <TextInput handleChangeEvent={handleChangePickupTimeEvent} value={customer_info.pickup_time} className={pickup_time_className} type="date"/>
-        </div>
+                {customer_info.phone_list.map(phone =>{
+                    let handleDeleteClickEvent = ()=>{
+                        dispatch({
+                            "type":"deletePhoneNumber",
+                            "id":phone.id
+                        });
+                    }            
+                    let handlePhoneNumberChange = (value)=>{dispatch({
+                        "type":"changePhoneNumber",
+                        "id":phone.id,
+                        "number":value,
+                    })}
+                    let phone_number_style = {
+                        width:(phone.number.length + 0.5) + "ch",
+                        minWidth:"10.5ch"
+                    }
+                    return(
+                    <div key={phone.id} className="flex justify-center">
+                        <TextInput handleChangeEvent={handlePhoneNumberChange} value={phone.number} className={phone_number_className} style={phone_number_style}/>
+                        <DeleteButton handleClickEvent={handleDeleteClickEvent} />
+                    </div>
+                )})}
+            </div>
+            <div className="p-1 grid grid-cols-4 gap-1 justify-items-center items-center">
+                <span className="text-base">訂購時間</span>
+                <TextInput handleChangeEvent={handleChangeOrderTimeEvent} value={customer_info.order_time} className={order_time_className} type="date"/>
+                <span className="text-base">取貨時間</span>
+                <TextInput handleChangeEvent={handleChangePickupTimeEvent} value={customer_info.pickup_time} className={pickup_time_className} type="date"/>
+            </div>
+        </>
     );
 }

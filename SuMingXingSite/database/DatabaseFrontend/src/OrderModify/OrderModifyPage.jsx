@@ -7,6 +7,7 @@ import { OrdersTotal } from "../Order/OrdersTotal"
 import { ReloadContext } from "../Order/OrderContext"
 
 import { getOrders } from "../DBOperation/operation"
+import Swal from "sweetalert2"
 
 
 
@@ -48,7 +49,7 @@ const default_rules = {
 export default function OrderModifyPage(){
     const [filter_rule, setFilterRule] = useState(default_rules);
     const [orders, setOrders] = useImmer([]);
-	
+
 	let display_content;
 	if (orders.length !== 0){
 		let type = filter_rule.types === "pickup_time" ? "取貨時間：" : "訂購時間："
@@ -86,9 +87,18 @@ export default function OrderModifyPage(){
 	}
 
 	let reloadOrder = async ()=>{
-		let filtered_orders = await getOrders(filter_rule);
-		console.log("reload!", filtered_orders)
-		setOrders(filtered_orders);
+		console.log("reload!")
+		let response = await getOrders(filter_rule);
+		if (response.JSStatus === "Success"){
+			setOrders(response.data);
+		}else{
+			Swal.fire({
+				title:"重整失敗",
+				icon:"error",   
+				text:response.data,                                                        
+			})
+		}
+
 	}
 
     return(

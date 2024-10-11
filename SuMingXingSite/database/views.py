@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpRequest, JsonResponse
 
 from .DBOperation import handleAddOrder, handleGetFilteredOrder, handleUpdateOrder, handleDeleteOrder
     
-import json
+import json, time
 from dateutil.parser import parse as dateParser
 
 """
@@ -50,22 +50,21 @@ def decodeBody(request:HttpRequest)->dict:
 """
 respone:{
     "Django Status":"Success" or "Error"
-    other_attributes: ...
-    ...
+    "Detail": data or error object
 }
 """
 
 DJANGO_STATUS = "Django Status"
 SUCCESS = "Success"
 ERROR = "Error"
-DETAIL = "detail"
+DETAIL = "Detail"
 
 
 def receiveAddOrder(request:HttpRequest):
     added_order = decodeBody(request)
     add_result = handleAddOrder(added_order)
-    if add_result["MongoStatus"] == "Sucess":
-        return JsonResponse({DJANGO_STATUS:SUCCESS,"_id":add_result["_id"]})
+    if add_result["MongoStatus"] == SUCCESS:
+        return JsonResponse({DJANGO_STATUS:SUCCESS,DETAIL:add_result["_id"]})
     else:
         return JsonResponse({DJANGO_STATUS:ERROR,DETAIL:add_result})
 
@@ -84,10 +83,10 @@ def receiveFilter(request:HttpRequest):
     filter = decodeBody(request)
     # filter by status first
     find_result = handleGetFilteredOrder({"status":filter["status"]})
-    if find_result["MongoStatus"] == "Sucess":
+    if find_result["MongoStatus"] == SUCCESS:
         filtered_order = find_result["data"]
         if filtered_order == []:
-            return JsonResponse({DJANGO_STATUS:SUCCESS,"data":filtered_order})
+            return JsonResponse({DJANGO_STATUS:SUCCESS,DETAIL:filtered_order})
     else:
         #TODO maybe do something more here
         return JsonResponse({DJANGO_STATUS:ERROR,DETAIL:find_result})
@@ -122,21 +121,21 @@ def receiveFilter(request:HttpRequest):
         output = filtered_order      
 
     output.sort(key=lambda x : dateParser(x["customer_info"][filter["types"]]), reverse=False)
-    return JsonResponse({DJANGO_STATUS:SUCCESS,"data":output})
+    return JsonResponse({DJANGO_STATUS:SUCCESS,DETAIL:output})
 
 def receiveEditedOrder(request:HttpRequest):
     updated_order = decodeBody(request)
     update_result = handleUpdateOrder(updated_order["_id"], updated_order["data"])
-    if update_result["MongoStatus"] == "Sucess":
-        return JsonResponse({DJANGO_STATUS:SUCCESS})
+    if update_result["MongoStatus"] == SUCCESS:
+        return JsonResponse({DJANGO_STATUS:SUCCESS, DETAIL:updated_order["_id"]})
     else:
         return JsonResponse({DJANGO_STATUS:ERROR, DETAIL:update_result})
 
 def receiveDeletedOrder(request:HttpRequest):
     _id_of_deleted_order = decodeBody(request)
     delete_result = handleDeleteOrder(_id_of_deleted_order)
-    if delete_result["MongoStatus"] == "Sucess":
-        return JsonResponse({DJANGO_STATUS:SUCCESS})
+    if delete_result["MongoStatus"] == SUCCESS:
+        return JsonResponse({DJANGO_STATUS:SUCCESS, DETAIL:_id_of_deleted_order})
     else:
         return JsonResponse({DJANGO_STATUS:ERROR, DETAIL:delete_result})
 

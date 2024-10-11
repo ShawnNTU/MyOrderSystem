@@ -33,6 +33,7 @@ const DOUGH_TYPE = {
     "大黑糖發糕":120,
     "粉紅發糕":35,
     "大粉紅發糕":120,
+    "麵線":30,
 }
 
 const TOWER_TYPE = {

@@ -10,7 +10,7 @@ db.sqlite3
 db.sqlite3-journal
 
 # MongoDatabase
-MongoDatabase/
+SuMingXingSite/MongoDB/
 
 # myown ignore file
 

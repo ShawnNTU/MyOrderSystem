@@ -1,4 +1,4 @@
-import {  useRef, useState } from "react";
+import { useState } from "react";
 import { useImmerReducer } from "use-immer";
 
 import { CustomerInfo } from "./CustomerInfo";
@@ -11,7 +11,7 @@ import { ItemListDispatchContext } from "./OrderContext";
 
 import { deleteOrder, addOrder, editOrder } from "../DBOperation/operation";
 
-import { ToggleButton, DeleteButton, SubmitButton } from "../Component/Button";
+import { ToggleButton, DeleteButton, SubmitButton, FinishButton } from "../Component/Button";
 
 import Swal from 'sweetalert2'
 import { useReloadContext } from "./OrderHook";
@@ -102,6 +102,8 @@ export function Order({order, current_page}){
     let open_init = current_page === "modify" ? false : true 
     const [opening, setOpening] = useState(open_init);
 
+    let reload_order = useReloadContext()
+
     let handleSubmitEvent = async ()=>{
         let checked_result = checkFormat(customer_info, item_list)
         if (checked_result.length !== 0){
@@ -120,15 +122,27 @@ export function Order({order, current_page}){
                     allowOutsideClick:false,
                     showLoaderOnConfirm:true,
                     preConfirm:async()=>{
-                        await editOrder({_id:order._id,data:deepcopyAndReindex(status, customer_info, item_list)})  
+                        return await editOrder({_id:order._id,data:deepcopyAndReindex(status, customer_info, item_list)})  
                     }
                 }).then(result=>{
                     if (result.isConfirmed){
-                        Swal.fire({
-                            title:"修改成功",
-                            icon:"success"
-                        })
-                        reload_order();
+                        if (result.value.JSStatus === "Success"){
+                            Swal.fire({
+                                title:"修改成功",
+                                icon:"success",                            
+                            }).then(()=>{
+                                reload_order();
+                            })
+                        }else{
+                            console.log(result)
+                            Swal.fire({
+                                title:"修改失敗",
+                                icon:"error",   
+                                text:result.value.data,                                                        
+                            }).then(()=>{
+                                reload_order();
+                            })
+                        }                        
                     }
                 })
             }else{
@@ -140,14 +154,23 @@ export function Order({order, current_page}){
                     allowOutsideClick:false,
                     showLoaderOnConfirm:true,
                     preConfirm:async()=>{
-                        await addOrder(deepcopyAndReindex(status, customer_info, item_list))
+                        return await addOrder(deepcopyAndReindex(status, customer_info, item_list))
                     }
                 }).then(result=>{
                     if (result.isConfirmed){
-                        Swal.fire({
-                            title:"新增成功",
-                            icon:"success"
-                        })
+                        if (result.value.JSStatus === "Success"){
+                            Swal.fire({
+                                title:"新增成功",
+                                icon:"success",                            
+                            })
+                        }else{
+                            console.log(result)
+                            Swal.fire({
+                                title:"新增失敗",
+                                icon:"error",   
+                                text:result.value.data,                                                        
+                            })
+                        }
                     }
                 })
                 
@@ -166,15 +189,63 @@ export function Order({order, current_page}){
                 showLoaderOnConfirm:true,
                 preConfirm:async()=>{
                     // order._id is automatically created by MongoDB
-                    await deleteOrder(order._id)
+                    return await deleteOrder(order._id)
                 }
             }).then(result=>{
                 if (result.isConfirmed){
-                    Swal.fire({
-                        title:"刪除成功",
-                        icon:"success"
-                    })
-                    reload_order();
+                    if (result.value.JSStatus === "Success"){
+                        Swal.fire({
+                            title:"刪除成功",
+                            icon:"success",                            
+                        }).then(()=>{
+                            reload_order();
+                        })
+                    }else{
+                        console.log(result)
+                        Swal.fire({
+                            title:"刪除失敗",
+                            icon:"error",   
+                            text:result.value.data,                                                        
+                        }).then(()=>{
+                            reload_order();
+                        })
+                    }                    
+                }
+            })
+        }
+    }
+
+    let handleFinishEvent = async ()=>{
+        if (current_page === "modify"){
+            Swal.fire({
+                title:"確定要完成訂單嗎",
+                icon:"info",
+                showConfirmButton:true,
+                showCancelButton:true,
+                allowOutsideClick:false,
+                showLoaderOnConfirm:true,
+                preConfirm:async()=>{
+                    return await editOrder({_id:order._id,data:deepcopyAndReindex("finished", customer_info, item_list)})  
+                }
+            }).then(result=>{
+                if (result.isConfirmed){
+                    if (result.value.JSStatus === "Success"){
+                        Swal.fire({
+                            title:"修改成功",
+                            icon:"success",                            
+                        }).then(()=>{
+                            reload_order();
+                        })
+                    }else{
+                        console.log(result)
+                        Swal.fire({
+                            title:"修改失敗",
+                            icon:"error",   
+                            text:result.value.data,                                                        
+                        }).then(()=>{
+                            reload_order();
+                        })
+                    }                        
                 }
             })
         }
@@ -206,7 +277,7 @@ export function Order({order, current_page}){
         )
     }
 
-    let reload_order = useReloadContext()
+    
     
     return (
         <div className={"my-1 rounded-md shadow-lg text-xl border-8 " + (status === "finished" ? "border-lime-300" : "border-amber-500/70")}>
@@ -215,6 +286,7 @@ export function Order({order, current_page}){
                 {!opening && content}
                 <ToggleButton state={opening} setState={setOpening} type={"opening"}/>
                 <ToggleButton state={editing} setState={setEditing} type={"editing"}/>
+                {status === "finished" ? null : <FinishButton handleClickEvent={handleFinishEvent} />}
                 <DeleteButton handleClickEvent={handleDeleteEvent} />
             </div>
             {opening && content}

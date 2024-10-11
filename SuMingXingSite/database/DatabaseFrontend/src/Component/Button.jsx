@@ -16,6 +16,15 @@ export function DeleteButton({handleClickEvent}){
     );
 }
 
+
+export function FinishButton({handleClickEvent}){
+    return (
+        <button className="bg-lime-200 rounded-md w-8 font-extrabold hover:bg-lime-500"
+            onClick={handleClickEvent}
+        >✓</button>
+    );
+}
+
 export function ToggleButton({state, setState, type}){
     let content;
     switch (type) {

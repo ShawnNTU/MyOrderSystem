@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-y-za%k^ddt8*=qbq@qn68thtc$hf*@*zyqt9gy@-yuq@0+@xq+
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '192.168.0.13'
+    '192.168.0.14'
     , '127.0.0.1'
 ]
 
@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'printer',
     'database.apps.DatabaseConfig',
     "corsheaders", # CORS !
 ]
@@ -64,7 +63,7 @@ if not DEBUG:
 CORS_ALLOWED_ORIGINS = [
     # "http://localhost:8080",
     # "http://127.0.0.1:9000",
-    "http://192.168.0.13:5173"
+    "http://192.168.0.14:5173"
 ]
 
 ROOT_URLCONF = 'SuMingXingSite.urls'
