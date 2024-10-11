@@ -17,12 +17,19 @@ The order format has been customized to suit our specific needs.
 ## How to use
 
 1. Download MongoDB and start an instance with a specific host and port. (one can put these settings in a customed mongod.cfg file)
-2. Run Django server with a specific host and port.
+2. under `database/DatabaseFrontend` use `npm run build` to build the js file
+3. Run Django server with a specific host and port.
 
-one need to replace the path to connecting ones MongoDB in the 10 line of `SuMingXingSite/database/DBOperation.py`.
+one will need to replace the host address in the following places before running these 3 steps:
+
+- `ALLOWED_HOSTS` in `settings.py`
+- `ROOT` in `database/DatabaseFrontend/src/DBOperation/operation.js`
+- `URI` in `database/DBOperation.py`
+- `bindIp` in your own `mongo.cfg` file
 
 ## Required Python Modules
 
 - Django
 - django-cors-headers
 - pymongo >= 4.9.1
+- dateutil
