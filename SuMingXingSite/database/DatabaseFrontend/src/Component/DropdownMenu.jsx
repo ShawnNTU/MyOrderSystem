@@ -11,6 +11,7 @@ export function DropdownMenu({display_value, snippet, handleRowClickEvent}){
                 onClick={()=>{!open && setOpen(true)}}
             >
                 {display_value === "" ? "請點我選擇" : display_value}
+                <ToggleButton state={open} setState={setOpen} type={"opening"} />
                 {open && 
                     <>
                         {/* this component is for closing the dropmenu when click "outside the dropmenu" */}
@@ -18,8 +19,7 @@ export function DropdownMenu({display_value, snippet, handleRowClickEvent}){
                             onClick={()=>{open && setOpen(false)}}
                         ></div>
                         {/* dropdown menu */}
-                        <div className={"absolute left-0 top-8 z-10 max-w-60 max-h-60 overflow-y-scroll overflow-x-hidden bg-white border border-stone-300 shadow-lg"} 
-                            onBlur={()=>{ open?setOpen(false):setOpen(true)}}
+                        <div className={"absolute left-0 top-8 z-10 max-w-60 max-h-60 overflow-y-scroll overflow-x-hidden bg-white border border-stone-300 shadow-lg"}                     
                         >
                             {/* search bar */}
                             <input type="text" className="sticky top-0 shadow-lg border border-neutral-300"
@@ -39,7 +39,7 @@ export function DropdownMenu({display_value, snippet, handleRowClickEvent}){
                         </div>
                     </>
                 }
-                <ToggleButton state={open} setState={setOpen} type={"opening"} />
+                
             </div>            
         </>
     );
