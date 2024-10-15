@@ -96,9 +96,9 @@ const MOON_CAKE = {
     "烏豆沙中式小月餅":45,
 }
 
-const STACKED_ITEM_MAP = {
-    "4大6小禮盒":800,
-    "6大8小禮盒":580,
+const GIFT_BOX = {
+    "禮盒4大6小":800,
+    "禮盒6大8小":580,
     "鳳梨酥12入禮盒":480,
     "中式12入禮盒":780,
     // "中式12入禮盒(無葷肉)":700,
@@ -112,7 +112,6 @@ const STACKED_ITEM_MAP = {
     "蛋黃酥15入禮盒":825,
     "蛋黃酥12入禮盒":660,
     "蛋黃酥10入禮盒":550,
-    "綜合餅龜":1,
 }
 
 const GUEI = {
@@ -125,7 +124,8 @@ const GUEI = {
     "果凍龜":160,
     "鳳片龜":150,
     "鳳梨餅龜":280,
-    "烏豆沙餅龜":280
+    "烏豆沙餅龜":280,
+    "綜合餅龜":1,
 }
 
 const SPECIAL = {
@@ -135,21 +135,26 @@ const SPECIAL = {
     "鳳片豬羊":150,
 }
 
+const STACKED_ITEM = {
+    ...GUEI,
+    ...GIFT_BOX
+}
+
 const ALL_ITEM = {
     ...DOUGH_TYPE,
     ...TOWER_TYPE,
     ...COMMON_CAKE,
     ...UNCOMMON_CAKE,
     ...MOON_CAKE,
-    ...GUEI,
     ...SPECIAL,
-    ...STACKED_ITEM_MAP,
+    ...STACKED_ITEM,
 }
+
 
 const ALL_ITEM_LIST = Object.keys(ALL_ITEM)
 
 export function hasSubItems(item_name){
-    return (STACKED_ITEM_MAP[item_name] !== undefined) ? true : false;
+    return (STACKED_ITEM[item_name] !== undefined) ? true : false;
 }
 
 export function getAvailableSnippet(item_name){
@@ -196,6 +201,56 @@ export function getAvailableSnippet(item_name){
                     "綠豆椪(斤)",
                     "咖哩餅(斤)",
                     "小芝麻餅(斤)",
+                ]
+            }
+            case "沙琪瑪龜" :{
+                return [
+                    "沙琪瑪(斤)"
+                ]
+            }
+            case "綠豆椪龜" :{
+                return [
+                    "綠豆椪(斤)"
+                ]
+            }
+            case "咖哩餅龜" :{
+                return [
+                    "咖哩餅(斤)"
+                ]
+            }
+            case "麵線龜" :{
+                return [
+                    "麵線(斤)"
+                ]
+            }
+            case "蛋糕龜" :{
+                return [
+                    "蛋糕(斤)"
+                ]
+            }
+            case "鳳梨酥龜" :{
+                return [
+                    "鳳梨酥(斤)"
+                ]
+            }
+            case "果凍龜" :{
+                return [
+                    "果凍(斤)"
+                ]
+            }
+            case "鳳片龜" :{
+                return [
+                    "鳳片(斤)"
+                ]
+            }
+            case "鳳梨餅龜" :{
+                return [
+                    "鳳梨餅(斤)"
+                ]
+            }
+            case "烏豆沙餅龜" :{
+                return [
+                    "烏豆沙餅(斤)"
                 ]
             }
         }

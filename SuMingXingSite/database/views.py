@@ -121,7 +121,7 @@ def receiveFilter(request:HttpRequest):
         output = filtered_order      
 
     output.sort(key=lambda x : dateParser(x["customer_info"][filter["types"]]), reverse=False)
-    return JsonResponse({DJANGO_STATUS:SUCCESS,DETAIL:output})
+    return JsonResponse({DJANGO_STATUS:SUCCESS,DETAIL:output}) 
 
 def receiveEditedOrder(request:HttpRequest):
     updated_order = decodeBody(request)
