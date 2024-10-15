@@ -1,27 +1,32 @@
 import { Fragment } from "react";
+import { isGuei } from "./Format";
 
+function insertAmount(name, amount){
+    // sub_name = "XXXX(斤)"
+    return name.split("(")[0] + String(amount) + "斤"
+}
 
 export function OrdersTotal({orders, filter_rule}){
     let total = {}
     for (let i = 0; i < orders.length; i++) {
         let item_list = orders[i].item_list
         for (let j = 0; j < item_list.length; j++) {
-            if (total[item_list[j].name] === undefined){
-                total[item_list[j].name] = item_list[j].amount;
+            let name, amount;
+            if (isGuei(item_list[j].name)){                
+                name = item_list[j].name + String(item_list[j].amount) + "斤"
+                amount = 1
             }else{
-                total[item_list[j].name] += item_list[j].amount;
+                name = item_list[j].name
+                amount = Number(item_list[j].amount)
             }
-            // check sub items
-            if (item_list[j].sub_item_list !== undefined){
-                let sub_item_list = item_list[j].sub_item_list
-                for (let k = 0; k < sub_item_list.length; k++) {
-                    if (total[sub_item_list[k].sub_name] === undefined){
-                        total[sub_item_list[k].sub_name] = sub_item_list[k].sub_amount;
-                    }else{
-                        total[sub_item_list[k].sub_name] += sub_item_list[k].sub_amount;
-                    }
-                }
-            }
+            total[name] === undefined ? total[name] = amount : total[name] += amount
+            // check sub items            
+            let sub_item_list = item_list[j].sub_item_list
+            for (let k = 0; k < sub_item_list.length; k++) {
+                let sub_name = sub_item_list[k].sub_name
+                let sub_amount = Number(sub_item_list[k].sub_amount)                
+                total[sub_name] === undefined ? total[sub_name] = sub_amount : total[sub_name] += sub_amount                
+            }            
         }
     }
 

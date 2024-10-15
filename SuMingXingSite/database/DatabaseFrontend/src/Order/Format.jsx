@@ -124,8 +124,7 @@ const GUEI = {
     "果凍龜":160,
     "鳳片龜":150,
     "鳳梨餅龜":280,
-    "烏豆沙餅龜":280,
-    "綜合餅龜":1,
+    "烏豆沙餅龜":280,    
 }
 
 const SPECIAL = {
@@ -136,8 +135,8 @@ const SPECIAL = {
 }
 
 const STACKED_ITEM = {
-    ...GUEI,
-    ...GIFT_BOX
+    ...GIFT_BOX,
+    "綜合餅龜":1,
 }
 
 const ALL_ITEM = {
@@ -147,6 +146,7 @@ const ALL_ITEM = {
     ...UNCOMMON_CAKE,
     ...MOON_CAKE,
     ...SPECIAL,
+    ...GUEI,
     ...STACKED_ITEM,
 }
 
@@ -155,6 +155,10 @@ const ALL_ITEM_LIST = Object.keys(ALL_ITEM)
 
 export function hasSubItems(item_name){
     return (STACKED_ITEM[item_name] !== undefined) ? true : false;
+}
+
+export function isGuei(item_name){
+    return (GUEI[item_name] !== undefined) ? true : false;
 }
 
 export function getAvailableSnippet(item_name){
@@ -201,56 +205,6 @@ export function getAvailableSnippet(item_name){
                     "綠豆椪(斤)",
                     "咖哩餅(斤)",
                     "小芝麻餅(斤)",
-                ]
-            }
-            case "沙琪瑪龜" :{
-                return [
-                    "沙琪瑪(斤)"
-                ]
-            }
-            case "綠豆椪龜" :{
-                return [
-                    "綠豆椪(斤)"
-                ]
-            }
-            case "咖哩餅龜" :{
-                return [
-                    "咖哩餅(斤)"
-                ]
-            }
-            case "麵線龜" :{
-                return [
-                    "麵線(斤)"
-                ]
-            }
-            case "蛋糕龜" :{
-                return [
-                    "蛋糕(斤)"
-                ]
-            }
-            case "鳳梨酥龜" :{
-                return [
-                    "鳳梨酥(斤)"
-                ]
-            }
-            case "果凍龜" :{
-                return [
-                    "果凍(斤)"
-                ]
-            }
-            case "鳳片龜" :{
-                return [
-                    "鳳片(斤)"
-                ]
-            }
-            case "鳳梨餅龜" :{
-                return [
-                    "鳳梨餅(斤)"
-                ]
-            }
-            case "烏豆沙餅龜" :{
-                return [
-                    "烏豆沙餅(斤)"
                 ]
             }
         }

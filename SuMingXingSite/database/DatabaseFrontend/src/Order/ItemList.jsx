@@ -6,7 +6,7 @@ import { ItemContext } from "./OrderContext";
 
 import { SubItemList } from "./SubItemList";
 
-import { getAvailableSnippet } from "./Format";
+import { getAvailableSnippet, isGuei } from "./Format";
 
 import { AddButton, DeleteButton } from "../Component/Button";
 import { DropdownMenu } from "../Component/DropdownMenu";
@@ -49,6 +49,8 @@ function Item(){
                 <DropdownMenu display_value={item.name} snippet={snippet} handleRowClickEvent={handleRowClickEvent} />
                 {/* for item amount */}
                 <TextInput handleChangeEvent={handleInputChangeEvent} value={item.amount} className={input_className} type="number"/>
+                {/* unit */}
+                {isGuei(item.name) ? "斤" : "個"}
                 <DeleteButton handleClickEvent={handleButtonClickEvent} />
             </li>
             <SubItemList sub_item_list={item.sub_item_list} />           

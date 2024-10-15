@@ -15,6 +15,7 @@ import { ToggleButton, DeleteButton, SubmitButton, FinishButton } from "../Compo
 
 import Swal from 'sweetalert2'
 import { useReloadContext } from "./OrderHook";
+import { isGuei } from "./Format";
 
 const DELETE_FUNCTION = {
     "create":()=>{},
@@ -79,7 +80,7 @@ function DisplayMode({status, customer_info, item_list}){
             <div className="my-1">
                 {item_list.map(item=>{return (
                     <ul key={item.id} className="ml-4 list-inside list-disc">
-                        <li>{item.name + " : " + item.amount}</li>
+                        <li>{item.name + " : " + item.amount + (isGuei(item.name) ? "斤" : "個")}</li>
                         <ul className="ml-4 list-inside list-disc">
                             {item.sub_item_list.map(sub_item=>{return (<li key={sub_item.sub_id}>{sub_item.sub_name + " : " +sub_item.sub_amount}</li>)})}
                         </ul>
