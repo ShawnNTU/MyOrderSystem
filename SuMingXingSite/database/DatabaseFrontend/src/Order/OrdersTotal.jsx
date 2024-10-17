@@ -30,7 +30,17 @@ export function OrdersTotal({orders, filter_rule}){
         }
     }
 
-    let items = Object.entries(total);
+    let items = Object.entries(total).sort((a,b)=>{
+        let a_name = a[0]
+        let b_name = b[0]
+        if (a_name > b_name){
+            return 1;
+        }else if (a_name < b_name){
+            return -1;
+        }else{
+            return 0;
+        }
+    });
     
 
     return (
