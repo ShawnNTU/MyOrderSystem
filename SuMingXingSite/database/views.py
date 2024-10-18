@@ -71,18 +71,33 @@ def receiveAddOrder(request:HttpRequest):
 def receiveFilter(request:HttpRequest):
     """
     default_rules = {
-        "start_time":"",
-        "end_time":"",
         "status":"unfinished",
-        "types":"pickup_time" // "pickup_time" or "order_time"
+        "name":"",
+        "phone_number":"",
+        "item_list":[], // [{id:1, item_name:xxx}, ...]
+        "types":"pickup_time",
+        "start_time":getTodayString(), // default is today
+        "end_time":"", // default is ""
     }
     """
     # TODO
     # transform datetime into UTC datetime object, then insert into the DB
     # instead just string
-    filter = decodeBody(request)
-    # filter by status first
-    find_result = handleGetFilteredOrder({"status":filter["status"]})
+    filter_rule = decodeBody(request)
+    
+    filter = {"customer_info.name":{"$regex":filter_rule["name"]}}
+
+    if filter_rule["phone_number"] != "":
+        filter["customer_info.phone_list"] = {"$elemMatch":{"number":{"$regex":filter_rule["phone_number"]}}}     
+    
+    if filter_rule["status"] != "":
+        filter["status"] = filter_rule["status"]
+    
+    if filter_rule["item_list"] != []:
+        filter["item_list.name"] = {"$all":[x["item_name"] for x in filter_rule["item_list"]]}
+
+    find_result = handleGetFilteredOrder(filter)
+
     if find_result["MongoStatus"] == SUCCESS:
         filtered_order = find_result["data"]
         if filtered_order == []:
@@ -92,8 +107,8 @@ def receiveFilter(request:HttpRequest):
         return JsonResponse({DJANGO_STATUS:ERROR,DETAIL:find_result})
     
     # process the judgement about datetime in python
-    start_time = dateParser(filter["start_time"]) if filter["start_time"] != "" else 0
-    end_time = dateParser(filter["end_time"]) if filter["end_time"] != "" else 0
+    start_time = dateParser(filter_rule["start_time"]) if filter_rule["start_time"] != "" else 0
+    end_time = dateParser(filter_rule["end_time"]) if filter_rule["end_time"] != "" else 0
         
     def both(target_time):
         return ((target_time >= start_time) and (target_time <= end_time))
@@ -114,13 +129,13 @@ def receiveFilter(request:HttpRequest):
     output = []
     if judge_function != False:
         for order in filtered_order:
-            target_time = dateParser(order["customer_info"][filter["types"]])
+            target_time = dateParser(order["customer_info"][filter_rule["types"]])
             if judge_function(target_time):
                 output.append(order)
     else:
         output = filtered_order      
 
-    output.sort(key=lambda x : dateParser(x["customer_info"][filter["types"]]), reverse=False)
+    output.sort(key=lambda x : dateParser(x["customer_info"][filter_rule["types"]]), reverse=False)
     return JsonResponse({DJANGO_STATUS:SUCCESS,DETAIL:output}) 
 
 def receiveEditedOrder(request:HttpRequest):

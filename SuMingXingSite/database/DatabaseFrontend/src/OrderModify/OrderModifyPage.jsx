@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { useImmer } from "use-immer"
 
 import { OrderFilter} from "../Order/OrderFilter"
@@ -7,9 +6,8 @@ import { OrdersTotal } from "../Order/OrdersTotal"
 import { ReloadContext } from "../Order/OrderContext"
 
 import { getOrders } from "../DBOperation/operation"
+import { getTodayString } from "../Utils/dateprocessing"
 import Swal from "sweetalert2"
-
-
 
 
 function temp(){
@@ -39,15 +37,18 @@ function temp(){
 	return test_data
 }
 
-const default_rules = {
-	"start_time":"",
-	"end_time":"",
+const default_rule = {
 	"status":"unfinished",
-	"types":"pickup_time"
+	"name":"",
+	"phone_number":"",
+	"item_list":[], // [{id:1, item_name:xxx}, ...]
+	"types":"pickup_time",
+	"start_time":getTodayString(), // default is today
+	"end_time":"", // default is ""
 }
 
 export default function OrderModifyPage(){
-    const [filter_rule, setFilterRule] = useState(default_rules);
+    const [filter_rule, setFilterRule] = useImmer(default_rule);
     const [orders, setOrders] = useImmer([]);
 
 	let display_content;
@@ -104,7 +105,7 @@ export default function OrderModifyPage(){
     return(
         <div className="mx-1">
 			<ReloadContext.Provider value={reloadOrder}>
-				<OrderFilter setFilterRule={setFilterRule} setOrders={setOrders}/>
+				<OrderFilter filter_rule={filter_rule} setFilterRule={setFilterRule} setOrders={setOrders}/>
 				{display_content}
 			</ReloadContext.Provider>
         </div> 
