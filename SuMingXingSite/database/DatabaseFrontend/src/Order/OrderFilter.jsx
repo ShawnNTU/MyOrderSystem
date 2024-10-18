@@ -69,7 +69,7 @@ export function OrderFilter({filter_rule, setFilterRule, setOrders}){
                 <div className="col-start-2 col-span-2 bg-yellow-300 rounded-md px-1">訂購者名稱含有</div>
                 <input type="text" 
                     value={filter_rule.name}
-                    className="col-start-2 col-span-2 px-0.5 outline-0 border border-stone-500 focus:ring-2 rounded-md hover:bg-slate-300"
+                    className="col-start-2 col-span-2 w-5/6 px-0.5 outline-0 border border-stone-500 focus:ring-2 rounded-md hover:bg-slate-300"
                     onChange={e=>{
                         setFilterRule(draft =>{
                             draft.name = e.target.value;
@@ -83,7 +83,7 @@ export function OrderFilter({filter_rule, setFilterRule, setOrders}){
                 <div className="col-start-2 col-span-2 bg-yellow-300 rounded-md px-1">訂購者電話含有</div>
                 <input type="text" 
                     value={filter_rule.phone_number}
-                    className="col-start-2 col-span-2 px-0.5 outline-0 border border-stone-500 focus:ring-2 rounded-md hover:bg-slate-300"
+                    className="col-start-2 col-span-2 w-5/6 px-0.5 outline-0 border border-stone-500 focus:ring-2 rounded-md hover:bg-slate-300"
                     onChange={e=>{
                         setFilterRule(draft =>{
                             draft.phone_number = e.target.value;
@@ -93,7 +93,7 @@ export function OrderFilter({filter_rule, setFilterRule, setOrders}){
             </div>    
             {/* filtering item name */}
             <div className="my-2 py-1 text-lg bg-neutral-100 rounded-md border">
-                <div className="flex justify-center items-center">
+                <div className="flex justify-center items-center gap-1">
                     <div className="bg-yellow-300 rounded-md px-1">訂購項目含有</div>
                     <DropdownMenu display_value={filter_item} snippet={getAvailableSnippet("")} handleRowClickEvent={handleRowClickEvent} />
                     <AddButton handleClickEvent={handleAddItem} />
@@ -109,8 +109,8 @@ export function OrderFilter({filter_rule, setFilterRule, setOrders}){
                         }
 
                         return (
-                            <div key={obj.id} className="bg-white rounded-md m-auto">
-                                {obj.item_name}
+                            <div key={obj.id} className="flex justify-center gap-1">
+                                <div className="bg-white p-0.5 border border-stone-300 rounded-md">{obj.item_name}</div>
                                 <DeleteButton handleClickEvent={handleDeleteItem} />
                             </div>                        
                         )
@@ -137,7 +137,7 @@ export function OrderFilter({filter_rule, setFilterRule, setOrders}){
                 <div className="col-start-2 col-span-2 bg-yellow-300 rounded-md px-1">在...日期之後</div>
                 <input type="date"
                     value={filter_rule.start_time}
-                    className="col-start-2 col-span-2 px-0.5 outline-0 border border-stone-500 focus:ring-2 rounded-md hover:bg-slate-300"
+                    className="col-start-2 col-span-2 w-5/6 bg-white px-0.5 outline-0 border border-stone-500 focus:ring-2 rounded-md hover:bg-slate-300"
                     onChange={(e)=>{
                         setFilterRule(draft=>{
                             draft.start_time = e.target.value
@@ -149,7 +149,7 @@ export function OrderFilter({filter_rule, setFilterRule, setOrders}){
                 <div className="col-start-2 col-span-2 bg-yellow-300 rounded-md px-1">在...日期之前</div>
                 <input type="date"
                     value={filter_rule.end_time}
-                    className="col-start-2 col-span-2 px-0.5 outline-0 border border-stone-500 focus:ring-2 rounded-md hover:bg-slate-300"
+                    className="col-start-2 col-span-2 w-5/6 bg-white px-0.5 outline-0 border border-stone-500 focus:ring-2 rounded-md hover:bg-slate-300"
                     onChange={(e)=>{
                         setFilterRule(draft=>{
                             draft.end_time = e.target.value
