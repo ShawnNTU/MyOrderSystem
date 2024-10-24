@@ -51,14 +51,14 @@ export function CustomerInfo(){
             "order_time":value
         })
     }
-    let order_time_className = "px-0.5 col-span-3 outline-0 border border-stone-500 bg-white focus:ring-2 rounded-md hover:bg-slate-300"
+    let order_time_className = "px-0.5 text-nowrap col-span-3 outline-0 border border-stone-500 bg-white focus:ring-2 rounded-md hover:bg-slate-300"
     let handleChangePickupTimeEvent = (value)=>{
         dispatch({
             "type":"changePickupTime",
             "pickup_time":value
         })
     }
-    let pickup_time_className = "px-0.5 col-span-3 outline-0 border border-stone-500 bg-white focus:ring-2 rounded-md hover:bg-slate-300"
+    let pickup_time_className = "px-0.5 text-nowrap col-span-3 outline-0 border border-stone-500 bg-white focus:ring-2 rounded-md hover:bg-slate-300"
 
     return ( 
         <>
@@ -93,9 +93,9 @@ export function CustomerInfo(){
                 )})}
             </div>
             <div className="p-1 grid grid-cols-4 gap-1 justify-items-center items-center">
-                <span className="text-base">訂購時間</span>
+                <span className="">訂購時間</span>
                 <TextInput handleChangeEvent={handleChangeOrderTimeEvent} value={customer_info.order_time} className={order_time_className} type="date"/>
-                <span className="text-base">取貨時間</span>
+                <span className="text-nowrap">取貨時間</span>
                 <TextInput handleChangeEvent={handleChangePickupTimeEvent} value={customer_info.pickup_time} className={pickup_time_className} type="date"/>
             </div>
         </>

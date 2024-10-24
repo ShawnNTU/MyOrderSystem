@@ -204,6 +204,8 @@ export function getAvailableSnippet(item_name){
                 return [
                     "綠豆椪(斤)",
                     "咖哩餅(斤)",
+                    "沙琪瑪(斤)",
+                    "鳳梨酥(斤)",
                     "小芝麻餅(斤)",
                 ]
             }

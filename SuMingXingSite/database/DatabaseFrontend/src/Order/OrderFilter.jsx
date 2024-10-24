@@ -117,8 +117,7 @@ export function OrderFilter({filter_rule, setFilterRule, setOrders}){
                     })}
                 </div>
             </div>    
-            <div className="my-2 py-1 text-lg bg-neutral-100 rounded-md border grid grid-cols-3 grid-rows-4 gap-1 justify-items-center">
-                
+            <div className="my-2 py-1 text-lg bg-neutral-100 rounded-md border grid grid-cols-3 grid-rows-4 gap-1 justify-items-center items-center">
                 {/* choose type of time (order time or pickup time) */}
                 <div className="row-start-2 bg-yellow-300 rounded-md px-1">類型</div>
                 <select className="row-start-3 h-8 bg-white rounded-md outline-none border border-stone-500 focus:ring-2"
@@ -137,7 +136,7 @@ export function OrderFilter({filter_rule, setFilterRule, setOrders}){
                 <div className="col-start-2 col-span-2 bg-yellow-300 rounded-md px-1">在...日期之後</div>
                 <input type="date"
                     value={filter_rule.start_time}
-                    className="col-start-2 col-span-2 w-5/6 bg-white px-0.5 outline-0 border border-stone-500 focus:ring-2 rounded-md hover:bg-slate-300"
+                    className="col-start-2 col-span-2 text-nowrap bg-white px-0.5 outline-0 border border-stone-500 focus:ring-2 rounded-md hover:bg-slate-300"
                     onChange={(e)=>{
                         setFilterRule(draft=>{
                             draft.start_time = e.target.value
@@ -149,7 +148,7 @@ export function OrderFilter({filter_rule, setFilterRule, setOrders}){
                 <div className="col-start-2 col-span-2 bg-yellow-300 rounded-md px-1">在...日期之前</div>
                 <input type="date"
                     value={filter_rule.end_time}
-                    className="col-start-2 col-span-2 w-5/6 bg-white px-0.5 outline-0 border border-stone-500 focus:ring-2 rounded-md hover:bg-slate-300"
+                    className="col-start-2 col-span-2 text-nowrap bg-white px-0.5 outline-0 border border-stone-500 focus:ring-2 rounded-md hover:bg-slate-300"
                     onChange={(e)=>{
                         setFilterRule(draft=>{
                             draft.end_time = e.target.value
